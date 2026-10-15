@@ -1,0 +1,18 @@
+Proposed video-reference extension for testing. The current deployed template does not include a video reference.
+
+Create a photorealistic two-person rap performance in the studio shown in Image 3.
+
+REFERENCE ROLES
+Image 1: identity, hairstyle, skin tone, and clothing of the left performer.
+Image 2: identity, hairstyle, skin tone, and clothing of the right performer.
+Image 3: studio environment, subject placement and spacing, lighting, orange background, and hanging microphone only.
+Video 1: left and right performers' body gestures, head movements, interaction, and performance timing only.
+Audio 1: soundtrack and vocal timeline. Video 1 and Audio 1 must cover the same performance interval.
+
+Preserve the separate identities from Images 1 and 2. Transfer the left performer's motion in Video 1 to the left output performer and the right performer's motion to the right output performer. Ignore Video 1's identities, wardrobe, background, camera movement, and soundtrack.
+
+Keep one fixed, front-facing medium shot with both performers' hands and wrists visible. Preserve the composition of Image 3. Keep the orange background, microphone, and suspension cable stationary. Do not add cuts, zooms, props, or scene changes.
+
+Use Audio 1 as the soundtrack. Match mouth movement to its vocal entrances and phrase endings, and transfer the gesture sequence from the aligned Video 1. Avoid identity swaps, repeated motion loops, distorted hands, subtitles, and logos.
+
+For a source-camera-preserving variant, replace the fixed-shot paragraph with an instruction to follow Video 1's framing, cuts, and camera timing. Do not keep both camera instructions.

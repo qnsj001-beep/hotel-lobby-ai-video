@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="420" viewBox="0 0 1000 420" role="img" aria-labelledby="title desc">
+  <title id="title">Hotel Lobby AI creative workflow</title>
+  <desc id="desc">Two subject photos, a scene image and audio are assigned clear roles, combined with a creative brief, generated with MiniMax H3, and reviewed before refinement and export.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#6585a4" stroke-width="1.5"/></marker>
+  </defs>
+  <rect width="1000" height="420" rx="16" fill="#f3f7fc"/>
+  <g font-family="Arial, sans-serif" fill="#19354e">
+    <text x="40" y="48" font-size="23" font-weight="700">A clear role for every reference</text>
+    <g fill="#fff" stroke="#ccdbea" stroke-width="1.5">
+      <rect x="40" y="82" width="190" height="92" rx="10"/>
+      <rect x="283" y="82" width="190" height="92" rx="10"/>
+      <rect x="526" y="82" width="190" height="92" rx="10"/>
+      <rect x="769" y="82" width="190" height="92" rx="10"/>
+    </g>
+    <g font-size="19" font-weight="700" text-anchor="middle">
+      <text x="135" y="119">Photo 1</text><text x="378" y="119">Photo 2</text>
+      <text x="621" y="119">Scene image</text><text x="864" y="119">Audio</text>
+    </g>
+    <g font-size="16" text-anchor="middle" fill="#5c7186">
+      <text x="135" y="148">Left subject</text><text x="378" y="148">Right subject</text>
+      <text x="621" y="148">Stage and framing</text><text x="864" y="148">Rhythm and timing</text>
+    </g>
+    <path d="M135 183V205H864V183M500 205V232" fill="none" stroke="#6585a4" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="274" y="244" width="452" height="58" rx="10" fill="#dcebf9" stroke="#bfd5ea"/>
+    <text x="500" y="281" font-size="21" font-weight="700" text-anchor="middle">Creative brief + MiniMax H3</text>
+    <path d="M500 312V337" fill="none" stroke="#6585a4" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="500" y="373" font-size="21" font-weight="700" text-anchor="middle">Generate a short test → Review → Refine → Export</text>
+  </g>
+</svg>

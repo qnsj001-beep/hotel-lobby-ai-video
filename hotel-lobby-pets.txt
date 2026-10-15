@@ -1,0 +1,9 @@
+Proposed pet adaptation for testing. This has not been established as the prompt that produced the existing pet example.
+
+Create a playful rap-duet video featuring the corgi from Image 1 on the left and the cat from Image 2 on the right. Preserve their species, fur colors, facial markings, ears, and relative size. Use Image 3 only for the orange studio, composition, lighting, and central hanging microphone.
+
+Keep one fixed, front-facing medium shot. The background and microphone remain stationary. Use Audio 1 for the soundtrack, rhythm, and phrase timing. Animate gentle head bobs, ear movement, small paw gestures, and alternating reactions between the two pets, with pauses between phrases.
+
+Keep recognizable animal paws and body proportions. Avoid human hands, human fingers, fused limbs, identity swaps, repeated loops, subtitles, and logos. Keep paw gestures clear of the microphone.
+
+If an anthropomorphic comedy style is intended, replace the animal-anatomy constraint with an explicit description of that style. Do not require natural animal anatomy and human hands at the same time.

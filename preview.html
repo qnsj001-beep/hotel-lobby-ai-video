@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How Do We Turn Two Photos into a Hotel Lobby AI Video?</title>
+<meta name="description" content="How Picsman designs a Hotel Lobby AI video workflow with character photos, a scene reference, audio guidance, prompts, and optional video references.">
+<style>
+:root{color-scheme:light;--ink:#152538;--muted:#647386;--line:#e3e9ef;--accent:#1264b7}
+*{box-sizing:border-box}body{margin:0;background:#f3f6f9;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.topbar{padding:18px 26px;background:#112b43;color:white;font-size:13px;letter-spacing:.04em}
+.topbar a{color:#b7dcff;text-decoration:none}.topbar .tag{float:right;color:#b9c8d6}
+main{max-width:1030px;margin:40px auto 64px;padding:54px 72px 60px;background:white;border:1px solid var(--line);border-radius:16px}
+h1{font-size:42px;line-height:1.16;letter-spacing:-1.15px;margin:0 0 18px;max-width:840px}
+.date{font-size:14px;color:var(--muted);margin:0 0 36px}h2{font-size:27px;line-height:1.25;margin:54px 0 20px;letter-spacing:-.4px;padding-top:8px;border-top:1px solid var(--line)}
+h3{font-size:20px;line-height:1.3;margin:32px 0 14px}p,li{font-size:17px;line-height:1.78}p{margin:16px 0}li{margin:8px 0}
+a{color:var(--accent);text-underline-offset:3px}a:hover{color:#094174}strong{font-weight:650}
+img{display:block;max-width:100%;height:auto;border-radius:8px;margin:22px 0}
+.video-case{margin:24px 0 30px}.video-case video{display:block;width:100%;height:auto;aspect-ratio:7/4;object-fit:contain;background:#a24913;border-radius:10px}
+figcaption{font-size:13px;color:var(--muted);margin:10px 0;text-align:center}
+blockquote{margin:24px 0;padding:8px 24px;border-left:4px solid #86afd4;background:#f4f8fc;border-radius:0 8px 8px 0}blockquote p{font-size:16px;line-height:1.75}
+pre{background:#11283d;color:#e4edf5;padding:24px;border-radius:10px;overflow:auto;line-height:1.65;font-size:13px}
+code{font-family:"SFMono-Regular",Consolas,monospace}p code,li code,td code{background:#edf3f9;padding:2px 5px;border-radius:4px;font-size:.86em}
+.table-wrap{overflow:auto;margin:24px 0}table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}th,td{border:1px solid var(--line);padding:12px 14px;text-align:left;vertical-align:top}th{background:#eef4fa}tr:nth-child(even) td{background:#fafcfe}
+.workflow{margin:28px auto;padding:26px;background:#f4f8fc;border:1px solid #d5e4f1;border-radius:10px;text-align:center;font-size:14px;max-width:640px}
+.workflow-inputs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.workflow-inputs span{background:white;border:1px solid #c6d7e6;border-radius:6px;padding:9px 16px}.workflow-step{padding:12px 20px;border:1px solid #c6d7e6;border-radius:6px;background:white}.model{background:#dcebfa;font-weight:650}.arrow{display:block;color:#6d8ca8;font-size:22px;margin:6px}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:24px;margin-top:44px}
+@media(max-width:740px){.topbar{padding:15px 20px}.topbar .tag{display:none}main{margin:0;padding:32px 22px;border:0;border-radius:0}h1{font-size:32px;letter-spacing:-.7px}h2{font-size:24px;margin-top:40px}p,li{font-size:16px}pre{padding:18px;font-size:12px}th,td{padding:10px;font-size:13px}table{min-width:570px}.workflow{padding:18px}.workflow-inputs span{padding:8px 12px}}
+</style></head><body>
+<div class="topbar"><a href="https://www.picsman.ai/">PICSMAN</a> / CREATIVE WORKFLOWS </div>
+<main><h1 id="how-do-we-turn-two-photos-into-a-hotel-lobby-ai-video">How Do We Turn Two Photos into a Hotel Lobby AI Video?</h1><div class="date">October 15, 2026 · Creative workflow</div>
+<p>A Hotel Lobby AI video has a recognizable setup: two performers, an orange studio, a hanging microphone, and a short rap duet. Creating that effect means making several decisions work together. The people should remain recognizable, the stage should stay consistent, and the movement should feel connected to the music.</p>
+<p>At Picsman, we approach this as a reusable creative workflow. The user supplies two photos. A prepared scene image defines the stage, an audio reference guides the performance, and a prompt explains the role of each input. We currently use <strong>MiniMax H3 in Reference to Video mode</strong> for this combination.</p>
+<p>We chose images and audio for the current template to keep costs down. A reference video is another useful option when the goal is to follow a specific performance more closely. The choice depends on how much control the result needs.</p>
+<p>Here is how we organize the workflow behind the <a href="https://www.picsman.ai/tools/ai-video-generator/hotel-lobby-ai">Picsman Hotel Lobby AI generator</a>, from choosing references to reviewing the finished clip.</p>
+<h2 id="start-with-the-result-you-want">Start with the result you want</h2>
+<p>Before choosing a model or writing a prompt, define what makes the video successful. For this format, the priorities are recognizable subjects, a shared orange stage, a stable microphone, and a convincing musical interaction.</p>
+<p>The examples below are the existing clips from our Hotel Lobby tutorial. They illustrate three ways to use the format; the workflow described here reflects our current template as of October 15, 2026.</p>
+<h3 id="two-friends">Two friends</h3>
+<p><a href="hotel-lobby-ai-best-friends.mp4"><img alt="Two friend photos and their Hotel Lobby AI result" src="hotel-lobby-ai-best-friends-before-after.webp" /></a></p>
+<figure class="video-case">
+<video controls playsinline preload="metadata" poster="hotel-lobby-ai-best-friends-poster.webp" aria-label="Two friends performing in the orange studio">
+<source src="hotel-lobby-ai-best-friends.mp4" type="video/mp4">
+<a href="hotel-lobby-ai-best-friends.mp4">Download the MP4</a>
+</video>
+<figcaption>Play the friends example with sound · about 5 seconds</figcaption>
+</figure>
+
+<p>The two photos establish different faces and outfits. The creative task is to bring those people into one scene while preserving the features that make each recognizable.</p>
+<h3 id="a-couple">A couple</h3>
+<p><a href="hotel-lobby-ai-couple.mp4"><img alt="Two couple photos and their Hotel Lobby AI result" src="hotel-lobby-ai-couple-before-after.webp" /></a></p>
+<figure class="video-case">
+<video controls playsinline preload="metadata" poster="hotel-lobby-ai-couple-poster.webp" aria-label="A couple performing a rap duet">
+<source src="hotel-lobby-ai-couple.mp4" type="video/mp4">
+<a href="hotel-lobby-ai-couple.mp4">Download the MP4</a>
+</video>
+<figcaption>Play the couple example with sound · about 5 seconds</figcaption>
+</figure>
+
+<p>Here, the interaction matters as much as the individual appearance. Glances, small reactions, and alternating gestures help the pair feel like they are performing together.</p>
+<h3 id="a-corgi-and-a-cat">A corgi and a cat</h3>
+<p><a href="hotel-lobby-ai-pets-cat-corgi.mp4"><img alt="Corgi and cat photos and their Hotel Lobby AI result" src="hotel-lobby-ai-pets-before-after.webp" /></a></p>
+<figure class="video-case">
+<video controls playsinline preload="metadata" poster="hotel-lobby-ai-pets-cat-corgi-poster.webp" aria-label="A corgi and a cat performing a rap duet">
+<source src="hotel-lobby-ai-pets-cat-corgi.mp4" type="video/mp4">
+<a href="hotel-lobby-ai-pets-cat-corgi.mp4">Download the MP4</a>
+</video>
+<figcaption>Play the pets example with sound · about 5 seconds</figcaption>
+</figure>
+
+<p>Pets introduce a style choice. This example takes an anthropomorphic approach to the performance. If the intended result should retain natural animal anatomy, specify paws and animal proportions when describing the movement.</p>
+<h2 id="give-each-reference-one-clear-role">Give each reference one clear role</h2>
+<p>The workflow separates appearance, setting, and performance timing. That makes it easier to describe what should change and what should stay consistent.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Reference</th>
+<th>Its job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Image 1</td>
+<td>Define the left performer's face, hair, skin tone, and clothing</td>
+</tr>
+<tr>
+<td>Image 2</td>
+<td>Define the right performer's identity and outfit</td>
+</tr>
+<tr>
+<td>Image 3</td>
+<td>Define the orange studio, lighting, composition, and hanging microphone</td>
+</tr>
+<tr>
+<td>Audio 1</td>
+<td>Guide the soundtrack, rhythm, vocal entrances, and phrase timing</td>
+</tr>
+</tbody>
+</table></div>
+<p><img alt="Hotel Lobby AI workflow from reference selection through prompting, generation, and review" src="hotel-lobby-workflow.svg" /></p>
+<p>The scene image contains two performers in the desired composition. Our prompt asks the model to replace them with the subjects from Images 1 and 2, while retaining the environment. The rooms in the two portrait photos should not influence the final stage.</p>
+<p>For the identity photos, choose one clearly visible subject per image. A view close to the intended output angle gives the model a more useful reference. If clothing should remain recognizable, include enough of the outfit in the photo too.</p>
+<p>The scene reference should already show the framing you want. A centered hanging microphone and enough space for both performers provide a concrete starting point, so the prompt can focus on the performance.</p>
+<h2 id="choose-a-model-that-fits-the-reference-plan">Choose a model that fits the reference plan</h2>
+<p>The model needs to handle the references the workflow relies on. For our current design, that means separate character images, a scene image, and audio in the same generation.</p>
+<p>We use <strong>MiniMax H3 Reference to Video</strong> for that combination. MiniMax's <a href="https://agent.minimax.io/tools/ai-video-generator">official H3 guidance</a> describes using image, video, and audio references, with a clear instruction about what each should contribute.</p>
+<p>Other approaches can also work:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>When it is useful</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MiniMax H3 Reference to Video</td>
+<td>Combine character, scene, and audio references; optionally add a performance video</td>
+</tr>
+<tr>
+<td>Seedance 2.0 with multimodal references</td>
+<td>Explore another model for combined image, video, and audio guidance, subject to the chosen service's access and input requirements</td>
+</tr>
+<tr>
+<td>Image to Video</td>
+<td>Animate a prepared image that already contains both subjects and the desired stage</td>
+</tr>
+<tr>
+<td>A motion-control workflow</td>
+<td>Follow a source performance when the movement sequence is a central requirement</td>
+</tr>
+</tbody>
+</table></div>
+<p>BytePlus documents <a href="https://docs.byteplus.com/en/docs/byteplus_las/video_gen_enhanced">combined reference workflows for Seedance</a>. It is another candidate to evaluate with the same photos, stage, and music.</p>
+<p>Choose based on the kind of control you need, then compare the outputs under the same conditions. A model that produces an attractive scene may still miss a subject's identity or the intended rhythm. Those details matter more to this format than a general model ranking.</p>
+<h2 id="write-the-prompt-as-a-creative-brief">Write the prompt as a creative brief</h2>
+<p>Our <a href="hotel-lobby-template.txt">full template prompt</a> covers six decisions: who appears, where they appear, how the camera behaves, how they move, how they follow the audio, and which visible errors to avoid.</p>
+<h3 id="assign-each-person-to-a-position">Assign each person to a position</h3>
+<p>Explain that the person from Image 1 replaces the left performer in Image 3, and the person from Image 2 replaces the right performer. Specify that faces, hairstyles, skin tones, and clothing follow the corresponding identity photo.</p>
+<p>This assignment matters throughout the clip. Both people need to stay recognizable when they turn, gesture, or look at each other.</p>
+<h3 id="preserve-the-stage-and-microphone">Preserve the stage and microphone</h3>
+<p>Use Image 3 as the environment reference. Keep its orange background, lighting, spacing, and microphone placement consistent. Describe the microphone as a stationary object, including its suspension cable.</p>
+<p>These concrete details give the scene its recognizable appearance. They also make the result easier to review: an unexpected background change or moving microphone is immediately visible.</p>
+<h3 id="keep-the-camera-simple">Keep the camera simple</h3>
+<p>Our template uses a fixed, front-facing medium shot with both performers' hands and wrists visible. This gives the duet room to move while keeping the two identities and central microphone easy to follow.</p>
+<p>Add camera movement only when it serves the intended result. A short performance already has faces, mouths, hands, and two people interacting; a stable viewpoint keeps the brief focused.</p>
+<h3 id="describe-interaction-and-pauses">Describe interaction and pauses</h3>
+<p>Ask for small gestures with preparation, emphasis, release, and rest. One performer can emphasize a phrase while the other nods, glances across, or responds with a restrained movement.</p>
+<p>Continuous movement on every beat can look mechanical. Phrase-level pauses and complementary reactions give the model a more useful description of a duet.</p>
+<h3 id="give-the-audio-a-defined-purpose">Give the audio a defined purpose</h3>
+<p>Our prompt asks Audio 1 to supply the soundtrack and performance timeline. Vocal entrances, accents, and pauses should guide the mouth movements and gestures.</p>
+<p>Review the generated sound and performance together. An audio reference guides generation, but the result still needs a check for changed music, misplaced vocal entrances, or mouth movements that do not follow the intended passage.</p>
+<h3 id="use-specific-constraints">Use specific constraints</h3>
+<p>Name the errors that would spoil this scene: the two people exchanging positions, faces changing, gestures repeating, hands passing through the microphone, or unwanted text appearing.</p>
+<p>For a pet version, revise the movement instructions to match the chosen style. Human hand and finger instructions can encourage an anthropomorphic result, which may be appropriate for comedy but inconsistent with a natural-animal brief.</p>
+<h2 id="a-short-prompt-you-can-adapt">A short prompt you can adapt</h2>
+<p>This shorter version is a starting point for experiments, rather than the verbatim template prompt:</p>
+<blockquote>
+<p>Create a photorealistic rap duet in the orange studio shown in Image 3.</p>
+<p>Use Image 1 for the performer on the left and Image 2 for the performer on the right. Preserve each person's face, hair, skin tone, and clothing. Use Image 3 for the environment, lighting, composition, and central hanging microphone.</p>
+<p>Keep a fixed, front-facing medium shot with both performers' hands and wrists visible. Maintain their positions and spacing. The background, microphone, and suspension cable remain stationary.</p>
+<p>Use Audio 1 as the soundtrack and performance timeline. Let the performers trade emphasis naturally: one gestures while the other nods or responds. Include small gestures, clear pauses, and brief rest between phrases. Coordinate mouth movements with the relevant vocal passages.</p>
+<p>Maintain both identities throughout. Avoid mirrored movements, repetitive gesture loops, distorted hands, position swaps, subtitles, and logos.</p>
+</blockquote>
+<p>The accompanying prompt files include a <a href="hotel-lobby-compact.txt">compact version</a>, a <a href="hotel-lobby-pets.txt">pet adaptation</a>, and a <a href="hotel-lobby-with-video.txt">video-reference adaptation</a>. The adaptations are intended for testing and refinement.</p>
+<h2 id="decide-whether-to-add-a-reference-video">Decide whether to add a reference video</h2>
+<p>Audio and video provide different kinds of performance guidance. Audio communicates rhythm and vocal timing. A video can also show the gestures, head movements, and interactions to follow.</p>
+<p>Our current template omits a reference video to keep costs down. The model creates movement from the images, audio, and written brief. When a particular choreography matters, a video reference becomes a useful addition.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Design choice</th>
+<th>Images and audio</th>
+<th>Images, audio, and video</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Appearance and stage</td>
+<td>Supplied by the three images</td>
+<td>Supplied by the same three images</td>
+</tr>
+<tr>
+<td>Musical timing</td>
+<td>Guided by the audio</td>
+<td>Guided by audio aligned with the video</td>
+</tr>
+<tr>
+<td>Gesture sequence</td>
+<td>Created from the brief</td>
+<td>Guided by the source performance</td>
+</tr>
+<tr>
+<td>Best fit</td>
+<td>A recognizable, flexible interpretation of the format</td>
+<td>A closer interpretation of a particular performance</td>
+</tr>
+<tr>
+<td>Cost decision</td>
+<td>Our current choice to keep costs down</td>
+<td>Consider the extra reference against the actual generation quote</td>
+</tr>
+</tbody>
+</table></div>
+<p>When combining video and audio, trim them to the same performance interval. Then explain what the video controls and what the images control:</p>
+<blockquote>
+<p>Use Video 1 for body gestures, head movements, and performance timing. Keep the left and right identities from Images 1 and 2, and the studio and microphone from Image 3. Use Audio 1 as the soundtrack. Ignore the source video's identities, wardrobe, and background.</p>
+</blockquote>
+<p>Also decide whether to follow the video's camera movements and cuts. If you want a fixed shot, state that. If you want its camera timing, revise the fixed-camera instruction so the two directions do not conflict.</p>
+<p>The <a href="https://arelion.dev/case-studies/hotel-lobby-ai-video/">arelion.dev case study</a> demonstrates a video-reference route. Our workflow uses a scene image and audio for its current cost target, with video available as an additional source of motion guidance.</p>
+<h2 id="use-a-short-test-to-refine-the-result">Use a short test to refine the result</h2>
+<p>Start with five seconds at 768p. That gives you a manageable clip for checking appearance, staging, and performance before choosing a longer duration or 2K output.</p>
+<p>Watch the beginning, middle, and end. A good first frame is only part of the result; the subjects and stage should remain consistent while the performance develops.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>What to review</th>
+<th>What to adjust first</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Each subject remains recognizable</td>
+<td>Use clearer photos and confirm the left/right assignment</td>
+</tr>
+<tr>
+<td>The stage and microphone stay consistent</td>
+<td>Strengthen the scene reference and fixed-camera instructions</td>
+</tr>
+<tr>
+<td>Gestures feel varied and continuous</td>
+<td>Reduce constant arm movement and add pauses between phrases</td>
+</tr>
+<tr>
+<td>The pair interact naturally</td>
+<td>Describe alternating emphasis and small responses</td>
+</tr>
+<tr>
+<td>Sound and mouth movements fit the same passage</td>
+<td>Check the chosen audio excerpt and the performance instructions</td>
+</tr>
+<tr>
+<td>A specific movement sequence is missing</td>
+<td>Test an aligned video reference</td>
+</tr>
+</tbody>
+</table></div>
+<p>Change one part of the brief at a time. Keep the successful references and scene instructions stable while you adjust the weak part. This makes it easier to understand which change improved the output.</p>
+<p>Our template offers five-, ten-, and fifteen-second clips, with 768p and 2K quality choices. Move to the desired final settings once the short test meets the creative brief. Compare cost across the attempts needed to reach an acceptable result, as well as the price of one generation.</p>
+<h2 id="turn-the-workflow-into-a-simple-template">Turn the workflow into a simple template</h2>
+<p>The reusable parts are the scene, audio, prompt, and initial settings. The personalized parts are the two subjects. Keeping those roles separate lets the user concentrate on choosing good photos.</p>
+<p>In Picsman, the flow is:</p>
+<ol>
+<li>Open the Hotel Lobby template and add two photos.</li>
+<li>Review the prepared references and output settings in the editor.</li>
+<li>Choose a short duration and initial quality, then generate a test.</li>
+<li>Review the performance, adjust if needed, and download the final clip.</li>
+</ol>
+<p>The same structure can support friends, couples, or pets. The stage and music provide continuity, while the photos and performance brief define each variation.</p>
+<p>Try the <a href="https://www.picsman.ai/tools/ai-video-generator/hotel-lobby-ai">Hotel Lobby AI template on Picsman</a>, or use the reference roles and prompt examples above to design your own workflow.</p>
+<p><a href="preview.html">Open the article preview with all three videos</a>.</p><footer>Hotel Lobby AI workflow by Picsman. Prompt examples and case videos accompany this article.</footer></main>
+</body></html>
